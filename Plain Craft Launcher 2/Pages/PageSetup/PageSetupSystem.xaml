@@ -80,6 +80,8 @@
                         </local:MyComboBox>
                         <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
+                        <local:MyCheckBox Margin="240,2,0,4" Text="自动识别剪贴板中的资源链接" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadClipboard" Tag="ToolDownloadClipboard" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

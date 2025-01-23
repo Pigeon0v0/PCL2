@@ -379,6 +379,60 @@
             End Try
         End Sub
 
+        '识别剪贴板内容
+        Public Shared Sub ClipboardListening()
+            Dim CurrentText As String = Nothing
+            While Setup.Get("ToolDownloadClipboard")
+                Dim Text As String = Nothing
+                RunInUiWait(Sub()
+                                Text = My.Computer.Clipboard.GetText().Replace("https://", "").Replace("http://", "")
+                            End Sub)
+                If Text = CurrentText Then Continue While
+                Dim Slug As String = Nothing
+                Dim ProjectId As String = Nothing
+                If Text.Contains("curseforge.com") Then 'https://www.curseforge.com/minecraft/mc-mods/jei
+                    Slug = Text.Split("/")(3)
+                    ProjectId = DlModRequest("https://api.curseforge.com/v1/mods/search?gameId=432&slug=" + Slug, IsJson:=True)("data")(0)("id")
+                    Log("[Clipboard] ProjectId: " + ProjectId)
+
+                    CurrentText = Text
+
+
+                    ''记录当前展开的卡片标题（#2712）
+                    'Dim Titles As New List(Of String)
+                    'If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
+                    '    For Each Card As MyCard In FrmDownloadCompDetail.PanResults.Children
+                    '        If Card.Title <> "" AndAlso Not Card.IsSwaped Then Titles.Add(Card.Title)
+                    '    Next
+                    '    Log("[Comp] 记录当前已展开的卡片：" & String.Join("、", Titles))
+                    '    FrmMain.PageCurrent.Additional(1) = Titles
+                    'End If
+                    ''打开详情页
+                    'Dim TargetVersion As String
+                    'Dim TargetLoader As CompModLoaderType
+                    'If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
+                    '    TargetVersion = FrmMain.PageCurrent.Additional(2)
+                    '    TargetLoader = FrmMain.PageCurrent.Additional(3)
+                    'Else
+                    '    Select Case CType(sender.Tag, CompProject).Type
+                    '        Case CompType.Mod
+                    '            TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
+                    '            TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+                    '        Case CompType.ModPack
+                    '            TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+                    '        Case Else 'CompType.ResourcePack
+                    '            'FUTURE: Res
+                    '            TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
+                    '    End Select
+                    'End If
+                    'If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompModLoaderType.Any
+                    'FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                    '       .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader}})
+                ElseIf Text.Contains("modrinth.com") Then 'https://modrinth.com/mod/fabric-api
+
+                End If
+            End While
+        End Sub
     End Class
 
 End Module

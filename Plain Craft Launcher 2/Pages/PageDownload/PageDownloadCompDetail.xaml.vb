@@ -412,5 +412,8 @@
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
     End Sub
+    Private Sub BtnIntroLinkCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroLinkCopy.Click
+        ClipboardSet(Project.Website)
+    End Sub
 
 End Class
